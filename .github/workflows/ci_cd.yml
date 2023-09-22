@@ -28,13 +28,13 @@ jobs:
 
       - name: Create a file
         if: contains(github.ref, 'refs/tags/')
-        run: echo ${{ matrix.version }} ~/output/${{ matrix.version }}_my_file.txt
+        run: echo ${{ matrix.version }} > ~/output/${{ matrix.version }}_my_file.txt
 
       - name: Upload RPM "${{ matrix.version }}"
         if: contains(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v3
         with:
-          name: rpm-${{ matrix.version }}
+          name: txt-${{ matrix.version }}
           path: ~/output
           if-no-files-found: error
 
@@ -52,7 +52,7 @@ jobs:
       - name: Download txt
         uses: actions/download-artifact@v3
         with:
-          name: rpm-10
+          name: txt-10
 
       - name: Extract Version Name
         id: extract_name
