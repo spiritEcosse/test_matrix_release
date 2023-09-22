@@ -4,7 +4,7 @@ name: AutoRelease
 
 on:
   push:
-    branch:
+    branches:
       - '*'
 
 
