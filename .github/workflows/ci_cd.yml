@@ -29,11 +29,11 @@ jobs:
         if: contains(github.ref, 'refs/tags/')
         run: echo ${{ matrix.version }} output/${{ matrix.version }}_my_file.txt
 
-      - name: Upload RPM "${{ matrix.arch }}"
+      - name: Upload RPM "${{ matrix.version }}"
         if: contains(github.ref, 'refs/tags/')
         uses: actions/upload-artifact@v3
         with:
-          name: rpm-${{ matrix.arch }}
+          name: rpm-${{ matrix.version }}
           path: output
 
 
@@ -48,7 +48,7 @@ jobs:
       - name: Download txt
         uses: actions/download-artifact@v3
         with:
-          name: txt
+          name: rpm-10
         continue-on-error: false
 
       - name: Create a release
