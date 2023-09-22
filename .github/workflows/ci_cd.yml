@@ -61,4 +61,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: output-rpms ${{ matrix.os }} ${{ matrix.version }}
-          path: output
+          path: ${{ github.workspace }}

@@ -6,6 +6,11 @@ All notable changes to this project will be documented in this file.
 - Fixed a typo in the README
 - Bugfix for #24
 
+## v1.2.12
+### Changed
+- Fixed a typo in the README
+- Bugfix for #24
+
 ## v1.2.10
 ### Changed
 - Fixed a typo in the README
