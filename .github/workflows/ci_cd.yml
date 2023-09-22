@@ -20,11 +20,6 @@ jobs:
       - name: Build project
         uses: nicledomaS/cmake_build_action@v1.4
 
-      - uses: actions/upload-artifact@v2
-        with:
-          path: build/*.tar.gz
-          name: artifact_${{ matrix.os }}_${{ matrix.configs }}.tar.gz
-
   release:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
