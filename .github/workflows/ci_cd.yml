@@ -8,7 +8,7 @@ on: [push]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build:
-    continue-on-error: true
+    continue-on-error: false
     strategy:
       matrix:
         version: [ 10, 12 ]
@@ -36,11 +36,12 @@ jobs:
         with:
           name: rpm-${{ matrix.version }}
           path: output
+          if-no-files-found: error
 
 
   release:
     name: Release
-    continue-on-error: true
+    continue-on-error: false
     # The type of runner that the job will run on
     needs: build
     runs-on: ubuntu-latest
