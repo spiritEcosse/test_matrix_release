@@ -39,11 +39,14 @@ jobs:
       - run: echo Version of ${{ matrix.os }} ${{ matrix.version }}
       - uses: actions/checkout@v3
 
+      - name: Prepare
+        run: mkdir -p output
+
       - name: Build project
         uses: nicledomaS/cmake_build_action@v1.4
 
       - name: Create a file
-        run: echo ${{ matrix.version }} > my_file.txt
+        run: echo ${{ matrix.version }} > output/my_file.txt
 
       - uses: CupOfTea696/gh-action-auto-release@v1.0.0
         if: matrix.version == 10
@@ -58,4 +61,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: output-rpms ${{ matrix.os }} ${{ matrix.version }}
-          path: ${{ github.workspace }}
+          path: output
