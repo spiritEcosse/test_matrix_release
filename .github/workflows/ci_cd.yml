@@ -62,3 +62,4 @@ jobs:
         with:
           name: output-rpms ${{ matrix.os }} ${{ matrix.version }}
           path: output/my_file.txt
+          if-no-files-found: error # 'warn' or 'ignore' are also available, defaults to `warn`
