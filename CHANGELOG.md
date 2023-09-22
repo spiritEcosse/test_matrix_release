@@ -1,12 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## v1.2.11
+## v1.2.13
 ### Changed
 - Fixed a typo in the README
 - Bugfix for #24
 
 ## v1.2.12
+### Changed
+- Fixed a typo in the README
+- Bugfix for #24
+
+## v1.2.11
 ### Changed
 - Fixed a typo in the README
 - Bugfix for #24
