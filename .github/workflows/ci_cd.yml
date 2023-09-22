@@ -45,6 +45,9 @@ jobs:
       - name: Build project
         uses: nicledomaS/cmake_build_action@v1.4
 
+      - name: Create a file
+        run: echo ${{ matrix.node-version }} > output/my_file.txt
+
       - uses: CupOfTea696/gh-action-auto-release@v1.0.0
         if: matrix.version == 10
         with:
