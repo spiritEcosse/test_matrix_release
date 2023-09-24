@@ -62,9 +62,24 @@ jobs:
                   script: |
                       return context.payload.ref.replace(/refs\/tags\//, '');
 
+#            - name: setup python
+#              uses: actions/setup-python@v4
+#              with:
+#                python-version: 3.11 #install the python needed
+
+            - name: Install jira
+              run: |
+                python -m pip install --upgrade pip
+                pip install jira
+
             - name: Generate notes from jira
               id: generate_notes
-              run: python -c "import os; print(os.getcwd())"
+              with:
+                  result-encoding: string
+                  shell: python
+                  script: |
+                      import os
+                      print(os.environ['PATH'])
 
             - name: Create a release
               uses: softprops/action-gh-release@v1
