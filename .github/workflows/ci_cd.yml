@@ -62,8 +62,6 @@ jobs:
                   script: |
                       return context.payload.ref.replace(/refs\/tags\//, '');
 
-            - uses: actions/checkout@v3
-
             - name: Generate notes from jira
               id: generate_notes
               run: python -c "import os; print(os.getcwd())"
