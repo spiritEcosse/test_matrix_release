@@ -74,13 +74,10 @@ jobs:
 
             - name: Generate notes from jira
               id: generate_notes
-              uses: actions/github-script@v4
-              with:
-                  result-encoding: string
-                  shell: python
-                  script: |
-                      import os
-                      print(os.environ['PATH'])
+              run: |
+                  import os
+                  print(os.environ['PATH'])
+              shell: python
 
             - name: Create a release
               uses: softprops/action-gh-release@v1
