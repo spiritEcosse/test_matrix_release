@@ -74,6 +74,7 @@ jobs:
 
             - name: Generate notes from jira
               id: generate_notes
+              uses: actions/github-script@v4
               with:
                   result-encoding: string
                   shell: python
