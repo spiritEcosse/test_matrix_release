@@ -64,17 +64,9 @@ jobs:
 
             - uses: actions/checkout@v3
 
-            - name: Generate and email notes
-              uses: actions/jira-release-notes@v1.0.1
-              with:
-                head: ${{github.event.pull_request.head.sha}}
-                base: ${{github.event.pull_request.base.sha}}
-                jira-code: 'BCPA'
-                jira-host: https://cross-bible.atlassian.net/
-                jira-username: spiritEcosse
-                jira-password: ${{secrets.JIRA_PASSWORD}}
-                app-name: 'My Awesome Service'
-                unshallow: true
+            - name: Generate notes from jira
+              id: generate_notes
+              run: python -c "import os; print(os.getcwd())"
 
             - name: Create a release
               uses: softprops/action-gh-release@v1
@@ -84,5 +76,5 @@ jobs:
                   name: Release ${{ steps.extract_name.outputs.result }}
                   draft: false
                   prerelease: false
-                  body: ${{ steps.pdf_generator.outputs.markdown }}
+                  body: ${{ steps.generate_notes.outputs.result }}
                   files: '*.txt'
