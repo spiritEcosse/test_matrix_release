@@ -130,5 +130,5 @@ jobs:
                   name: ${{ steps.extract_name.outputs.result }}
                   draft: false
                   prerelease: false
-                  body: ${{ env.ENV_NAME }}
+                  body: ${{ env.NOTES }}
                   files: '*.txt'
