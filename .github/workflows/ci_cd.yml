@@ -49,51 +49,45 @@ jobs:
 
         # Steps represent a sequence of tasks that will be executed as part of the job
         steps:
-            - name: Download txt
-              uses: actions/download-artifact@v3
-              with:
-                  name: txt-10
+            -   name: Download txt
+                uses: actions/download-artifact@v3
+                with:
+                    name: txt-10
 
-            - name: Extract Version Name
-              id: version
-              uses: actions/github-script@v4
-              with:
-                  result-encoding: string
-                  script: |
-                      return context.payload.ref.replace(/refs\/tags\//, '');
+            -   name: Extract Version Name
+                id: version
+                uses: actions/github-script@v4
+                with:
+                    result-encoding: string
+                    script: |
+                        return context.payload.ref.replace(/refs\/tags\//, '');
 
-#            - name: setup python
-#              uses: actions/setup-python@v4
-#              with:
-#                python-version: 3.11 #install the python needed
+            -   name: Install jira
+                run: |
+                    python -m pip install --upgrade pip
+                    pip install jira
 
-            - name: Install jira
-              run: |
-                python -m pip install --upgrade pip
-                pip install jira
+            -   name: Generate notes from jira
+                id: generate_notes
+                env:
+                    JIRA_HOST: ${{ secrets.JIRA_HOST }}
+                    JIRA_USER: ${{ secrets.JIRA_USER }}
+                    JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+                    VERSION: ${{ steps.version.outputs.result }}
+                run: |
+                    {
+                        echo 'NOTES<<EOF'
+                        curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | python
+                        echo EOF
+                    } >> "$GITHUB_ENV"
 
-            - name: Generate notes from jira
-              id: generate_notes
-              env:
-                  JIRA_HOST: ${{ secrets.JIRA_HOST }}
-                  JIRA_USER: ${{ secrets.JIRA_USER }}
-                  JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
-                  VERSION: ${{ steps.version.outputs.result }}
-              run: |
-                {
-                    echo 'NOTES<<EOF'
-                    curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | python
-                    echo EOF
-                } >> "$GITHUB_ENV"
-
-            - name: Create a release
-              uses: softprops/action-gh-release@v1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-              with:
-                  name: ${{ steps.version.outputs.result }}
-                  draft: false
-                  prerelease: false
-                  body: ${{ env.NOTES }}
-                  files: '*.txt'
-
+            -   name: Create a release
+                uses: softprops/action-gh-release@v1
+                env:
+                    GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
+                with:
+                    name: ${{ steps.version.outputs.result }}
+                    draft: false
+                    prerelease: false
+                    body: ${{ env.NOTES }}
+                    files: '*.txt'
