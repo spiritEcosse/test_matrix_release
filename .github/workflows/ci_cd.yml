@@ -74,6 +74,10 @@ jobs:
 
             - name: Generate notes from jira
               id: generate_notes
+              env:
+                  JIRA_HOST: ${{ secrets.JIRA_HOST }}
+                  JIRA_USER: ${{ secrets.JIRA_USER }}
+                  JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
               run: |
                   from os import environ as env
             
