@@ -117,6 +117,7 @@ jobs:
                     notes_list.append(f"**Full Changelog**: https://github.com/spiritEcosse/bible/commits/${{ steps.extract_name.outputs.result }}")
                   
                   notes = "\n".join(notes_list)
+                  print(notes)
 
                   with open(file_path, 'a') as gh_envs:
                     gh_envs.write(f"NOTES={notes}\n")
