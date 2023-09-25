@@ -78,7 +78,7 @@ jobs:
                   JIRA_HOST: ${{ secrets.JIRA_HOST }}
                   JIRA_USER: ${{ secrets.JIRA_USER }}
                   JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
-              run: curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | bash >> "$GITHUB_OUTPUT"
+              run: curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | python >> "$GITHUB_OUTPUT"
 
             - name: Create a release
               uses: softprops/action-gh-release@v1
