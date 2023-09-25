@@ -55,7 +55,7 @@ jobs:
                   name: txt-10
 
             - name: Extract Version Name
-              id: extract_name
+              id: version
               uses: actions/github-script@v4
               with:
                   result-encoding: string
@@ -78,6 +78,7 @@ jobs:
                   JIRA_HOST: ${{ secrets.JIRA_HOST }}
                   JIRA_USER: ${{ secrets.JIRA_USER }}
                   JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
+                  VERSION: ${{ steps.version.outputs.result }}
               run: curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | python >> "$GITHUB_OUTPUT"
 
             - name: Create a release
@@ -85,7 +86,7 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
               with:
-                  name: ${{ steps.extract_name.outputs.result }}
+                  name: ${{ steps.version.outputs.result }}
                   draft: false
                   prerelease: false
                   body: ${{ steps.generate_notes.outputs.result }}
