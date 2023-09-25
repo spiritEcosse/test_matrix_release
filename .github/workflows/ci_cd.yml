@@ -75,8 +75,14 @@ jobs:
             - name: Generate notes from jira
               id: generate_notes
               run: |
-                  import os
-                  print(os.environ['PATH'])
+                  from os import environ as env
+            
+                  file_path = env.get('GITHUB_ENV', None)
+                  if file_path is None:
+                  raise OSError('Environment file not found')
+            
+                  with open(file_path, 'a') as gh_envs:
+                    gh_envs.write('ENV_NAME=ENV_VALUE\n')
               shell: python
 
             - name: Create a release
@@ -87,5 +93,5 @@ jobs:
                   name: Release ${{ steps.extract_name.outputs.result }}
                   draft: false
                   prerelease: false
-                  body: ${{ steps.generate_notes.outputs.result }}
+                  body: ${{ env.ENV_NAME }}
                   files: '*.txt'
