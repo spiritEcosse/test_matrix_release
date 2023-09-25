@@ -79,7 +79,7 @@ jobs:
             
                   file_path = env.get('GITHUB_ENV', None)
                   if file_path is None:
-                  raise OSError('Environment file not found')
+                    raise OSError('Environment file not found')
             
                   with open(file_path, 'a') as gh_envs:
                     gh_envs.write('ENV_NAME=ENV_VALUE\n')
