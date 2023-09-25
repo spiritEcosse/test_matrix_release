@@ -79,7 +79,12 @@ jobs:
                   JIRA_USER: ${{ secrets.JIRA_USER }}
                   JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
                   VERSION: ${{ steps.version.outputs.result }}
-              run: curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | python >> "$GITHUB_OUTPUT"
+              run: |
+                {
+                    echo 'NOTES<<EOF'
+                    curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | python
+                    echo EOF
+                } >> "$GITHUB_ENV"
 
             - name: Create a release
               uses: softprops/action-gh-release@v1
@@ -89,5 +94,5 @@ jobs:
                   name: ${{ steps.version.outputs.result }}
                   draft: false
                   prerelease: false
-                  body: ${{ steps.generate_notes.outputs.result }}
+                  body: ${{ NOTES }}
                   files: '*.txt'
