@@ -78,50 +78,7 @@ jobs:
                   JIRA_HOST: ${{ secrets.JIRA_HOST }}
                   JIRA_USER: ${{ secrets.JIRA_USER }}
                   JIRA_TOKEN: ${{ secrets.JIRA_TOKEN }}
-              run: |
-                  from os import environ as env
-            
-                  file_path = env.get('GITHUB_ENV', None)
-                  if file_path is None:
-                    raise OSError('Environment file not found')
-                  
-                  from jira import JIRA
-                  from os import environ as env
-                  import requests
-                  from requests.auth import HTTPBasicAuth
-                  from collections import defaultdict
-                  
-                  jira = JIRA(env['JIRA_HOST'], basic_auth=(env['JIRA_USER'], env['JIRA_TOKEN']))
-                  issues = jira.search_issues(f"project=FB and fixVersion=${{ steps.extract_name.outputs.result }}")
-                  
-                  with requests.sessions.Session() as session:
-                    session.auth = (env['JIRA_USER'], env['JIRA_TOKEN'])
-                    d = defaultdict(list)
-                    for issue in issues[:5]:
-                      d[issue.fields.issuetype].append(issue)
-                    print(d.keys(), len(issues))
-                    notes_list = []
-
-                    for group, issues in d.items():
-                        notes_list.append("<details>")
-
-                        notes_list.append(f"<summary>{group}</summary>\n")
-                        for issue in issues:
-                            res = session.get(f"{env['JIRA_HOST']}/rest/dev-status/1.0/issue/details?issueId={int(issue.id)}&applicationType=github&dataType=pullrequest")
-                            j = res.json()
-                            pull_request = j['detail'][0]['pullRequests'][0]['url'] if j['detail'] else ""
-                            last_commit = j['detail'][0]['branches'][0]['lastCommit']['url'] if j['detail'] else ""
-                            notes_list.append(f"* [{issue.key}]({issue.permalink()}); {issue.fields.summary}; @spiritEcosse in {pull_request}; commit: {last_commit}")
-                        notes_list.append("</details>")
-                    notes_list.append("\n## Other")
-                    notes_list.append(f"**Full Changelog**: https://github.com/spiritEcosse/bible/commits/${{ steps.extract_name.outputs.result }}")
-                  
-                  notes = "\n".join(notes_list)
-                  print(notes)
-
-                  with open(file_path, 'a') as gh_envs:
-                    gh_envs.write(f"NOTES={notes}\n")
-              shell: python
+              run: curl https://spiritecosse.github.io/aws-sailfish-sdk/get_notes.py | bash >> "$GITHUB_OUTPUT"
 
             - name: Create a release
               uses: softprops/action-gh-release@v1
@@ -131,5 +88,5 @@ jobs:
                   name: ${{ steps.extract_name.outputs.result }}
                   draft: false
                   prerelease: false
-                  body: ${{ env.NOTES }}
+                  body: ${{ steps.generate_notes.outputs.result }}
                   files: '*.txt'
